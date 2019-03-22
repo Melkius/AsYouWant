@@ -5,7 +5,9 @@ import {
   Button,
   FlatList,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator,
+  StyleSheet
 } from "react-native";
 import { Input } from "react-native-elements";
 import { createStackNavigator, createAppContainer } from "react-navigation";
@@ -33,32 +35,40 @@ class HomeScreen extends React.Component {
   }
 
   fetchTheApi = concat => {
-    if (
-      this.state.search == "" &&
-      this.state.cards.length <= this.state.totalCount
-    ) {
-      fetch(`${url}?page=${this.state.pageNumber}`)
-        .then(response => response.json())
-        .then(data =>
-          concat
-            ? this.setState(state => ({
-                cards: state.cards.concat(data.cards),
-                pageNumber: this.state.pageNumber + 1,
-                totalCount: data._totalCount
-              }))
-            : this.setState(() => ({
-                cards: data.cards,
-                pageNumber: this.state.pageNumber + 1,
-                totalCount: data._totalCount
-              }))
-        )
-        .then(() =>
-          this.setState({
-            isLoading: false
-          })
-        )
-        .catch();
-    }
+    this.setState({
+      isLoading: true
+    },
+      () => {
+        if (
+          this.state.search == "" &&
+          this.state.cards.length <= this.state.totalCount
+        ) {
+          fetch(`${url}?page=${this.state.pageNumber}`)
+            .then(response => response.json())
+            .then(data =>
+              concat
+                ? this.setState(state => ({
+                  cards: state.cards.concat(data.cards),
+                  pageNumber: this.state.pageNumber + 1,
+                  totalCount: data._totalCount,
+                  isLoading: false
+                }))
+                : this.setState(() => ({
+                  cards: data.cards,
+                  pageNumber: this.state.pageNumber + 1,
+                  totalCount: data._totalCount,
+                  isLoading: false
+                }))
+            )
+            .then(() =>
+              this.setState({
+                isLoading: false
+              })
+            )
+            .catch();
+        }
+      }
+    )
   };
 
   fetchCardsWithSearch(text) {
@@ -83,6 +93,7 @@ class HomeScreen extends React.Component {
 
   render() {
     const { search } = this.state;
+
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
         <Input
@@ -91,7 +102,10 @@ class HomeScreen extends React.Component {
           onChangeText={text => this.handleSearchChange(text)}
           value={search}
         />
-        <FlatList
+
+        <ActivityIndicator visibility={this.state.isLoading ? "visible" : "hidden"} size="large" color="#0000ff" />
+
+        <FlatList visibility={this.state.isLoading ? "hidden" : "visible"}
           numColumns="2"
           showsVerticalScrollIndicator
           data={this.state.cards}
@@ -175,3 +189,15 @@ export default class App extends React.Component {
     return <AppContainer />;
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center'
+  },
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10
+  }
+})
