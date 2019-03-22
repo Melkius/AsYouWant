@@ -1,4 +1,4 @@
-import React from "react";
+mport React from "react";
 import {
   View,
   Text,
@@ -85,7 +85,7 @@ class HomeScreen extends React.Component {
           data={this.state.cards}
           keyExtractor={(item, i) => i.toString()}
           renderItem={({ item, index }) => {
-            console.log(item);
+            //console.log(item);
             return (
               <TouchableOpacity onPress={() => this.onDetail(item)} key={index}>
                 <Image
@@ -159,3 +159,4 @@ export default class App extends React.Component {
     return <AppContainer />;
   }
 }
+
