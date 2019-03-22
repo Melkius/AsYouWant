@@ -5,9 +5,14 @@ import {
   Button,
   FlatList,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
+import { Input } from 'react-native-elements';
 import { createStackNavigator, createAppContainer } from "react-navigation";
+import axios from "axios"
+
+const url = `https://api.elderscrollslegends.io/v1/cards`;
 
 class HomeScreen extends React.Component {
   state = {
@@ -16,26 +21,47 @@ class HomeScreen extends React.Component {
     isLoading: false
   };
 
-  updateSearch = search => {
-    this.setState({ search });
-  };
+  handleSearchChange(text) {
+    this.setState({ search: text });
+    if (text === "") {
+      this.fetchTheApi()
+    } else {
+      this.fetchCardsWithSearch(text)
+    }
+  }
 
   fetchTheApi = concat => {
-    const url = `https://api.elderscrollslegends.io/v1/cards`;
     fetch(url)
       .then(response => response.json())
       .then(data =>
         concat
           ? this.setState(state => ({
-              cards: state.cards.concat(data.cards)
-            }))
+            cards: state.cards.concat(data.cards)
+          }))
           : this.setState(() => ({
-              cards: data.cards
-            }))
+            cards: data.cards
+          }))
       )
       .then(() => this.setState({ isLoading: false }))
       .catch();
   };
+
+  fetchCardsWithSearch(text) {
+    axios.get(url)
+      .then(res => {
+        var updateList = res.data.cards
+        updateList = updateList.filter((item => {
+          return item.name.toLowerCase().search(
+            text.toLowerCase()) !== -1;
+        }));
+        this.setState({
+          cards: []
+        })
+        this.setState({
+          cards: updateList
+        })
+      });
+  }
 
   onDetail = item => {
     this.props.navigation.navigate("Details", { card: item });
@@ -49,13 +75,17 @@ class HomeScreen extends React.Component {
     const { search } = this.state;
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Text>Home Screen</Text>
+        <Input
+          placeholder='Search your card here...'
+          leftIcon={{ type: 'font-awesome', name: 'search' }}
+          onChangeText={(text) => this.handleSearchChange(text)}
+          value={search}
+        />
         <FlatList
           numColumns="2"
           showsVerticalScrollIndicator
           data={this.state.cards}
           renderItem={({ item }) => {
-            console.log(item);
             return (
               <TouchableOpacity onPress={() => this.onDetail(item)}>
                 <Image
@@ -69,6 +99,7 @@ class HomeScreen extends React.Component {
                   }}
                   source={{ uri: item.imageUrl }}
                   key={item.index}
+                  PlaceholderContent={<ActivityIndicator />}
                 />
               </TouchableOpacity>
             );
@@ -101,8 +132,15 @@ class DetailsScreen extends React.Component {
 
 const RootStack = createStackNavigator(
   {
-    Home: HomeScreen,
-    Details: DetailsScreen
+    Home: {
+      screen: HomeScreen,
+      navigationOptions: {
+        headerTitle: "Home"
+      },
+    },
+    Details: {
+      screen: DetailsScreen
+    },
   },
   {
     initialRouteName: "Home"
