@@ -1,16 +1,15 @@
-import React from "react";
+mport React from "react";
 import {
   View,
   Text,
   Button,
   FlatList,
   Image,
-  TouchableOpacity,
-  ActivityIndicator
+  TouchableOpacity
 } from "react-native";
-import { Input } from 'react-native-elements';
+import { Input } from "react-native-elements";
 import { createStackNavigator, createAppContainer } from "react-navigation";
-import axios from "axios"
+import axios from "axios";
 
 const url = `https://api.elderscrollslegends.io/v1/cards`;
 
@@ -24,43 +23,42 @@ class HomeScreen extends React.Component {
   handleSearchChange(text) {
     this.setState({ search: text });
     if (text === "") {
-      this.fetchTheApi()
+      this.fetchTheApi();
     } else {
-      this.fetchCardsWithSearch(text)
+      this.fetchCardsWithSearch(text);
     }
   }
 
   fetchTheApi = concat => {
+    const url = `https://api.elderscrollslegends.io/v1/cards`;
     fetch(url)
       .then(response => response.json())
       .then(data =>
         concat
           ? this.setState(state => ({
-            cards: state.cards.concat(data.cards)
-          }))
+              cards: state.cards.concat(data.cards)
+            }))
           : this.setState(() => ({
-            cards: data.cards
-          }))
+              cards: data.cards
+            }))
       )
       .then(() => this.setState({ isLoading: false }))
       .catch();
   };
 
   fetchCardsWithSearch(text) {
-    axios.get(url)
-      .then(res => {
-        var updateList = res.data.cards
-        updateList = updateList.filter((item => {
-          return item.name.toLowerCase().search(
-            text.toLowerCase()) !== -1;
-        }));
-        this.setState({
-          cards: []
-        })
-        this.setState({
-          cards: updateList
-        })
+    axios.get(url).then(res => {
+      var updateList = res.data.cards;
+      updateList = updateList.filter(item => {
+        return item.name.toLowerCase().search(text.toLowerCase()) !== -1;
       });
+      this.setState({
+        cards: []
+      });
+      this.setState({
+        cards: updateList
+      });
+    });
   }
 
   onDetail = item => {
@@ -76,18 +74,20 @@ class HomeScreen extends React.Component {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
         <Input
-          placeholder='Search your card here...'
-          leftIcon={{ type: 'font-awesome', name: 'search' }}
-          onChangeText={(text) => this.handleSearchChange(text)}
+          placeholder="Search your card here..."
+          leftIcon={{ type: "font-awesome", name: "search" }}
+          onChangeText={text => this.handleSearchChange(text)}
           value={search}
         />
         <FlatList
           numColumns="2"
           showsVerticalScrollIndicator
           data={this.state.cards}
-          renderItem={({ item }) => {
+          keyExtractor={(item, i) => i.toString()}
+          renderItem={({ item, index }) => {
+            //console.log(item);
             return (
-              <TouchableOpacity onPress={() => this.onDetail(item)}>
+              <TouchableOpacity onPress={() => this.onDetail(item)} key={index}>
                 <Image
                   style={{
                     flex: 1,
@@ -98,8 +98,6 @@ class HomeScreen extends React.Component {
                     maxHeight: 304
                   }}
                   source={{ uri: item.imageUrl }}
-                  key={item.index}
-                  PlaceholderContent={<ActivityIndicator />}
                 />
               </TouchableOpacity>
             );
@@ -119,7 +117,7 @@ class DetailsScreen extends React.Component {
         <Text>{card.name}</Text>
         <Image
           source={{ uri: card.imageUrl }}
-          style={{ width: 150, height: 200 }}
+          style={{ minWidth: 250, maxWidth: 400, height: 400, maxHeight: 450 }}
         />
         <Button
           title="Go back"
@@ -135,12 +133,19 @@ const RootStack = createStackNavigator(
     Home: {
       screen: HomeScreen,
       navigationOptions: {
-        headerTitle: "Home"
-      },
+        title: "Home"
+      }
     },
     Details: {
-      screen: DetailsScreen
-    },
+      screen: DetailsScreen,
+      navigationOptions: props => {
+        const { navigation } = props;
+        const card = navigation.getParam("card");
+        return {
+          title: card.name
+        };
+      }
+    }
   },
   {
     initialRouteName: "Home"
@@ -154,3 +159,4 @@ export default class App extends React.Component {
     return <AppContainer />;
   }
 }
+
