@@ -49,15 +49,15 @@ class HomeScreen extends React.Component {
     const { search } = this.state;
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Text>Home Screen</Text>
         <FlatList
           numColumns="2"
           showsVerticalScrollIndicator
           data={this.state.cards}
-          renderItem={({ item }) => {
+          keyExtractor={(item, i) => i.toString()}
+          renderItem={({ item, index }) => {
             console.log(item);
             return (
-              <TouchableOpacity onPress={() => this.onDetail(item)}>
+              <TouchableOpacity onPress={() => this.onDetail(item)} key={index}>
                 <Image
                   style={{
                     flex: 1,
@@ -68,7 +68,6 @@ class HomeScreen extends React.Component {
                     maxHeight: 304
                   }}
                   source={{ uri: item.imageUrl }}
-                  key={item.index}
                 />
               </TouchableOpacity>
             );
@@ -88,7 +87,7 @@ class DetailsScreen extends React.Component {
         <Text>{card.name}</Text>
         <Image
           source={{ uri: card.imageUrl }}
-          style={{ width: 150, height: 200 }}
+          style={{ minWidth: 250, maxWidth: 400, height: 400, maxHeight: 450 }}
         />
         <Button
           title="Go back"
@@ -101,8 +100,22 @@ class DetailsScreen extends React.Component {
 
 const RootStack = createStackNavigator(
   {
-    Home: HomeScreen,
-    Details: DetailsScreen
+    Home: {
+      screen: HomeScreen,
+      navigationOptions: {
+        title: "Home"
+      }
+    },
+    Details: {
+      screen: DetailsScreen,
+      navigationOptions: props => {
+        const { navigation } = props;
+        const card = navigation.getParam("card");
+        return {
+          title: card.name
+        };
+      }
+    }
   },
   {
     initialRouteName: "Home"
