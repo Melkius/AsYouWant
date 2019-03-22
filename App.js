@@ -7,7 +7,11 @@ import {
   Image,
   TouchableOpacity
 } from "react-native";
+import { Input } from "react-native-elements";
 import { createStackNavigator, createAppContainer } from "react-navigation";
+import axios from "axios";
+
+const url = `https://api.elderscrollslegends.io/v1/cards`;
 
 class HomeScreen extends React.Component {
   state = {
@@ -16,9 +20,14 @@ class HomeScreen extends React.Component {
     isLoading: false
   };
 
-  updateSearch = search => {
-    this.setState({ search });
-  };
+  handleSearchChange(text) {
+    this.setState({ search: text });
+    if (text === "") {
+      this.fetchTheApi();
+    } else {
+      this.fetchCardsWithSearch(text);
+    }
+  }
 
   fetchTheApi = concat => {
     const url = `https://api.elderscrollslegends.io/v1/cards`;
@@ -37,6 +46,21 @@ class HomeScreen extends React.Component {
       .catch();
   };
 
+  fetchCardsWithSearch(text) {
+    axios.get(url).then(res => {
+      var updateList = res.data.cards;
+      updateList = updateList.filter(item => {
+        return item.name.toLowerCase().search(text.toLowerCase()) !== -1;
+      });
+      this.setState({
+        cards: []
+      });
+      this.setState({
+        cards: updateList
+      });
+    });
+  }
+
   onDetail = item => {
     this.props.navigation.navigate("Details", { card: item });
   };
@@ -49,6 +73,12 @@ class HomeScreen extends React.Component {
     const { search } = this.state;
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <Input
+          placeholder="Search your card here..."
+          leftIcon={{ type: "font-awesome", name: "search" }}
+          onChangeText={text => this.handleSearchChange(text)}
+          value={search}
+        />
         <FlatList
           numColumns="2"
           showsVerticalScrollIndicator
