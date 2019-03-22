@@ -15,43 +15,55 @@ const url = `https://api.elderscrollslegends.io/v1/cards`;
 
 class HomeScreen extends React.Component {
   state = {
-    search: "",
     cards: [],
-    isLoading: false
+    isLoading: false,
+    pageNumber: 1,
+    search: "",
+    totalCount: 100
   };
 
   handleSearchChange(text) {
-    this.setState({ search: text });
-    if (text === "") {
-      this.fetchTheApi();
-    } else {
-      this.fetchCardsWithSearch(text);
-    }
+    this.setState({ search: text, pageNumber: 1 }, () => {
+      if (text === "" && this.state.cards.length <= this.state.totalCount) {
+        this.fetchTheApi();
+      } else {
+        this.fetchCardsWithSearch(text);
+      }
+    });
   }
 
   fetchTheApi = concat => {
-    const url = `https://api.elderscrollslegends.io/v1/cards`;
-    fetch(url)
-      .then(response => response.json())
-      .then(data =>
-        concat
-          ? this.setState(state => ({
-              cards: state.cards.concat(data.cards)
-            }))
-          : this.setState(() => ({
-              cards: data.cards
-            }))
-      )
-      .then(() => this.setState({ isLoading: false }))
-      .catch();
+    if (
+      this.state.search == "" &&
+      this.state.cards.length <= this.state.totalCount
+    ) {
+      fetch(`${url}?page=${this.state.pageNumber}`)
+        .then(response => response.json())
+        .then(data =>
+          concat
+            ? this.setState(state => ({
+                cards: state.cards.concat(data.cards),
+                pageNumber: this.state.pageNumber + 1,
+                totalCount: data._totalCount
+              }))
+            : this.setState(() => ({
+                cards: data.cards,
+                pageNumber: this.state.pageNumber + 1,
+                totalCount: data._totalCount
+              }))
+        )
+        .then(() =>
+          this.setState({
+            isLoading: false
+          })
+        )
+        .catch();
+    }
   };
 
   fetchCardsWithSearch(text) {
-    axios.get(url).then(res => {
+    axios.get(`${url}?name=${text}`).then(res => {
       var updateList = res.data.cards;
-      updateList = updateList.filter(item => {
-        return item.name.toLowerCase().search(text.toLowerCase()) !== -1;
-      });
       this.setState({
         cards: []
       });
@@ -83,6 +95,7 @@ class HomeScreen extends React.Component {
           numColumns="2"
           showsVerticalScrollIndicator
           data={this.state.cards}
+          onEndReached={this.fetchTheApi}
           keyExtractor={(item, i) => i.toString()}
           renderItem={({ item, index }) => {
             //console.log(item);
@@ -114,11 +127,14 @@ class DetailsScreen extends React.Component {
     const card = navigation.getParam("card", "No-Object");
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Text>{card.name}</Text>
         <Image
           source={{ uri: card.imageUrl }}
           style={{ minWidth: 250, maxWidth: 400, height: 400, maxHeight: 450 }}
         />
+        <Text style={{ padding: 4 }}>{card.name}</Text>
+        <Text style={{ padding: 4 }}>{card.name}</Text>
+        <Text style={{ padding: 4 }}>{card.name}</Text>
+
         <Button
           title="Go back"
           onPress={() => this.props.navigation.goBack()}
