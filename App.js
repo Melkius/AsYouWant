@@ -1,172 +1,26 @@
 import React from "react";
-import {
-  View,
-  Text,
-  Button,
-  FlatList,
-  Image,
-  TouchableOpacity
-} from "react-native";
-import { Input } from "react-native-elements";
 import { createStackNavigator, createAppContainer } from "react-navigation";
-import axios from "axios";
+import { HomeScreen } from "./MainPage/Container";
+import { DetailsScreen } from "./DetailPage/DetailScreen";
 
-const url = `https://api.elderscrollslegends.io/v1/cards`;
-
-class HomeScreen extends React.Component {
-  state = {
-    cards: [],
-    isLoading: false,
-    pageNumber: 1,
-    search: "",
-    totalCount: 100
-  };
-
-  handleSearchChange(text) {
-    this.setState({ search: text, pageNumber: 1 }, () => {
-      if (text === "" && this.state.cards.length <= this.state.totalCount) {
-        this.fetchTheApi();
-      } else {
-        this.fetchCardsWithSearch(text);
-      }
-    });
-  }
-
-  fetchTheApi = concat => {
-    if (
-      this.state.search == "" &&
-      this.state.cards.length <= this.state.totalCount
-    ) {
-      fetch(`${url}?page=${this.state.pageNumber}`)
-        .then(response => response.json())
-        .then(data =>
-          concat
-            ? this.setState(state => ({
-                cards: state.cards.concat(data.cards),
-                pageNumber: this.state.pageNumber + 1,
-                totalCount: data._totalCount
-              }))
-            : this.setState(() => ({
-                cards: data.cards,
-                pageNumber: this.state.pageNumber + 1,
-                totalCount: data._totalCount
-              }))
-        )
-        .then(() =>
-          this.setState({
-            isLoading: false
-          })
-        )
-        .catch();
-    }
-  };
-
-  fetchCardsWithSearch(text) {
-    axios.get(`${url}?name=${text}`).then(res => {
-      var updateList = res.data.cards;
-      this.setState({
-        cards: []
-      });
-      this.setState({
-        cards: updateList
-      });
-    });
-  }
-
-  onDetail = item => {
-    this.props.navigation.navigate("Details", { card: item });
-  };
-
-  componentDidMount() {
-    this.fetchTheApi();
-  }
-
-  render() {
-    const { search } = this.state;
-    return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Input
-          placeholder="Search your card here..."
-          leftIcon={{ type: "font-awesome", name: "search" }}
-          onChangeText={text => this.handleSearchChange(text)}
-          value={search}
-        />
-        <FlatList
-          numColumns="2"
-          showsVerticalScrollIndicator
-          data={this.state.cards}
-          onEndReached={this.fetchTheApi}
-          keyExtractor={(item, i) => i.toString()}
-          renderItem={({ item, index }) => {
-            //console.log(item);
-            return (
-              <TouchableOpacity onPress={() => this.onDetail(item)} key={index}>
-                <Image
-                  style={{
-                    flex: 1,
-                    margin: 5,
-                    minWidth: 180,
-                    maxWidth: 250,
-                    height: 304,
-                    maxHeight: 304
-                  }}
-                  source={{ uri: item.imageUrl }}
-                />
-              </TouchableOpacity>
-            );
-          }}
-        />
-      </View>
-    );
-  }
-}
-
-class DetailsScreen extends React.Component {
-  render() {
-    const { navigation } = this.props;
-    const card = navigation.getParam("card", "No-Object");
-    return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Image
-          source={{ uri: card.imageUrl }}
-          style={{ minWidth: 250, maxWidth: 400, height: 400, maxHeight: 450 }}
-        />
-        <Text style={{ padding: 4 }}>{card.name}</Text>
-        <Text style={{ padding: 4 }}>{card.name}</Text>
-        <Text style={{ padding: 4 }}>{card.name}</Text>
-
-        <Button
-          title="Go back"
-          onPress={() => this.props.navigation.goBack()}
-        />
-      </View>
-    );
-  }
-}
-
-const RootStack = createStackNavigator(
-  {
-    Home: {
-      screen: HomeScreen,
-      navigationOptions: {
-        title: "Home"
-      }
-    },
-    Details: {
-      screen: DetailsScreen,
-      navigationOptions: props => {
-        const { navigation } = props;
-        const card = navigation.getParam("card");
-        return {
-          title: card.name
-        };
-      }
+const RootStack = createStackNavigator({
+  Home: {
+    screen: HomeScreen,
+    navigationOptions: {
+      title: "Home"
     }
   },
-  {
-    initialRouteName: "Home"
+  Details: {
+    screen: DetailsScreen,
+    navigationOptions: props => {
+      const { navigation } = props;
+      const card = navigation.getParam("card");
+      return {
+        title: card.name
+      };
+    }
   }
-);
+});
 
 const AppContainer = createAppContainer(RootStack);
 
