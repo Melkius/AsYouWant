@@ -6,7 +6,13 @@ class DetailsScreen extends React.Component {
     const { navigation } = this.props;
     const card = navigation.getParam("card", "No-Object");
     return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <View
+        style={{
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "center"
+        }}
+      >
         <Image
           source={{ uri: card.imageUrl }}
           style={{ minWidth: 250, maxWidth: 400, height: 400, maxHeight: 450 }}
@@ -17,6 +23,7 @@ class DetailsScreen extends React.Component {
         <Text style={{ padding: 4 }}>Cost : {card.cost}</Text>
 
         <Button
+          color={"#D2B48C"}
           title="Go back"
           onPress={() => this.props.navigation.goBack()}
         />

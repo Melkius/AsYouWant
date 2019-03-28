@@ -7,7 +7,14 @@ const RootStack = createStackNavigator({
   Home: {
     screen: HomeScreen,
     navigationOptions: {
-      title: "Home"
+      title: "Home",
+      headerStyle: {
+        backgroundColor: "#4169E1"
+      },
+      headerTintColor: "#FFFAFA",
+      headerTitleStyle: {
+        fontWeight: "bold"
+      }
     }
   },
   Details: {
@@ -16,7 +23,14 @@ const RootStack = createStackNavigator({
       const { navigation } = props;
       const card = navigation.getParam("card");
       return {
-        title: card.name
+        title: card.name,
+        headerStyle: {
+          backgroundColor: "#4169E1"
+        },
+        headerTintColor: "#FFFAFA",
+        headerTitleStyle: {
+          fontWeight: "bold"
+        }
       };
     }
   }
