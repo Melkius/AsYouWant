@@ -1,13 +1,53 @@
 import React from "react";
-import { View, Picker } from "react-native";
+import { View } from "react-native";
 import { CustomSearchBar } from "./CustomSearchBar";
 import { ListView } from "./ListView";
+import { SpinnerMenu } from "./SpinnerMenu";
 
 class MainPage extends React.Component {
-  state = {
-    type: this.props.type,
-    subType: this.props.subType,
-    rarity: this.props.rarity
+  constructor(props) {
+    super(props);
+    this.state = {
+      type: this.props.type,
+      subType: this.props.subType,
+      rarity: this.props.rarity
+    };
+    this.onTypeChanged = this.onTypeChanged.bind(this);
+    this.onSubTypeChanged = this.onSubTypeChanged.bind(this);
+    this.onRarityChanged = this.onRarityChanged.bind(this);
+  }
+
+  onTypeChanged = (itemValue, itemIndex) => {
+    this.setState(
+      {
+        type: itemValue,
+        subType: this.state.subType,
+        rarity: this.state.rarity
+      },
+      this.props.setAttributes(itemValue, this.state.subType, this.state.rarity)
+    );
+  };
+
+  onSubTypeChanged = (itemValue, itemIndex) => {
+    this.setState(
+      {
+        type: this.state.type,
+        subType: itemValue,
+        rarity: this.state.rarity
+      },
+      this.props.setAttributes(this.state.type, itemValue, this.state.rarity)
+    );
+  };
+
+  onRarityChanged = (itemValue, itemIndex) => {
+    this.setState(
+      {
+        type: this.state.type,
+        subType: this.state.subType,
+        rarity: itemValue
+      },
+      this.props.setAttributes(this.state.type, this.state.subType, itemValue)
+    );
   };
 
   render() {
@@ -36,107 +76,26 @@ class MainPage extends React.Component {
             justifyContent: "space-evenly"
           }}
         >
-          <Picker
-            style={{ width: "28%" }}
+          <SpinnerMenu
+            menuWidth={"28%"}
             selectedValue={props.type}
-            mode="dropdown"
-            onValueChange={(itemValue, itemIndex) => {
-              this.setState(
-                {
-                  type: itemValue,
-                  subType: this.state.subType,
-                  rarity: this.state.rarity
-                },
-                props.setAttributes(
-                  itemValue,
-                  this.state.subType,
-                  this.state.rarity
-                )
-              );
-            }}
-          >
-            {typesElements.map((itemValue, index) => {
-              if (index === 0) {
-                return <Picker.Item label={itemValue} value={""} key={index} />;
-              } else {
-                return (
-                  <Picker.Item
-                    label={itemValue}
-                    value={itemValue}
-                    key={index}
-                  />
-                );
-              }
-            })}
-          </Picker>
+            onValueChange={this.onTypeChanged}
+            spinnerElements={typesElements}
+          />
 
-          <Picker
-            style={{ width: "40%" }}
+          <SpinnerMenu
+            menuWidth={"40%"}
             selectedValue={props.subType}
-            mode="dropdown"
-            onValueChange={(itemValue, itemIndex) => {
-              this.setState(
-                {
-                  type: this.state.type,
-                  subType: itemValue,
-                  rarity: this.state.rarity
-                },
-                props.setAttributes(
-                  this.state.type,
-                  itemValue,
-                  this.state.rarity
-                )
-              );
-            }}
-          >
-            {subTypesElements.map((itemValue, index) => {
-              if (index === 0) {
-                return <Picker.Item label={itemValue} value={""} key={index} />;
-              } else {
-                return (
-                  <Picker.Item
-                    label={itemValue}
-                    value={itemValue}
-                    key={index}
-                  />
-                );
-              }
-            })}
-          </Picker>
+            onValueChange={this.onSubTypeChanged}
+            spinnerElements={subTypesElements}
+          />
 
-          <Picker
-            style={{ width: "32%" }}
+          <SpinnerMenu
+            menuWidth={"32%"}
             selectedValue={props.rarity}
-            mode="dropdown"
-            onValueChange={(itemValue, itemIndex) => {
-              this.setState(
-                {
-                  type: this.state.type,
-                  subType: this.state.subType,
-                  rarity: itemValue
-                },
-                props.setAttributes(
-                  this.state.type,
-                  this.state.subType,
-                  itemValue
-                )
-              );
-            }}
-          >
-            {rarityElements.map((itemValue, index) => {
-              if (index === 0) {
-                return <Picker.Item label={itemValue} value={""} key={index} />;
-              } else {
-                return (
-                  <Picker.Item
-                    label={itemValue}
-                    value={itemValue}
-                    key={index}
-                  />
-                );
-              }
-            })}
-          </Picker>
+            onValueChange={this.onRarityChanged}
+            spinnerElements={rarityElements}
+          />
         </View>
 
         <ListView

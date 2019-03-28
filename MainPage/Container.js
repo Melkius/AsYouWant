@@ -129,7 +129,6 @@ class HomeScreen extends React.Component {
 
   componentDidMount() {
     this.fetchElements();
-    //this.fetchTheApi();
   }
 
   render() {
