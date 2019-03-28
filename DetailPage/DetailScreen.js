@@ -23,6 +23,7 @@ class DetailsScreen extends React.Component {
         <Text style={{ padding: 4 }}>Cost : {card.cost}</Text>
 
         <Button
+          style={{ display: "flex", justifySelf: "end" }}
           color={"#D2B48C"}
           title="Go back"
           onPress={() => this.props.navigation.goBack()}
