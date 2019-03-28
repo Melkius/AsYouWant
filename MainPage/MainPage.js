@@ -17,7 +17,13 @@ class MainPage extends React.Component {
     const rarityElements = ["Rarity", "Common", "Rare", "Epic", "Legendary"];
 
     return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <View
+        style={{
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "center"
+        }}
+      >
         <CustomSearchBar
           handleSearchChange={props.handleSearchChange}
           value={props.search}

@@ -2,8 +2,8 @@ import React from "react";
 import axios from "axios";
 import { MainPage } from "./MainPage";
 
-const url = `https://api.elderscrollslegends.io/v1/cards`;
-const url2 = `https://api.elderscrollslegends.io/v1/`;
+const url = `https://api.elderscrollslegends.io/v1/`;
+//const url2 = `https://api.elderscrollslegends.io/v1/`;
 
 class HomeScreen extends React.Component {
   constructor(props) {
@@ -58,7 +58,7 @@ class HomeScreen extends React.Component {
 
   fetchElements = () => {
     if (this.state.subTypesElements.length == 0) {
-      fetch(`${url2}subtypes`)
+      fetch(`${url}subtypes`)
         .then(response => response.json())
         .then(data =>
           this.setState(
@@ -83,7 +83,7 @@ class HomeScreen extends React.Component {
       this.state.cards.length <= this.state.totalCount
     ) {
       console.log("fetch");
-      fetch(`${url}?page=${this.state.pageNumber}`)
+      fetch(`${url}cards?page=${this.state.pageNumber}`)
         .then(response => response.json())
         .then(data =>
           concat
@@ -108,7 +108,7 @@ class HomeScreen extends React.Component {
   };
 
   fetchCardsWithSearch(text, type, rarity, subType) {
-    const attributedUrl = `${url}/?name=${text}&type=${
+    const attributedUrl = `${url}cards/?name=${text}&type=${
       type ? type : ""
     }&rarity=${subType ? subType : ""}&subtypes=${rarity ? rarity : ""}`;
     axios.get(attributedUrl).then(res => {
