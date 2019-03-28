@@ -12,9 +12,9 @@ class MainPage extends React.Component {
 
   render() {
     const props = this.props;
-    const subTypesElements = props.subTypesElements;
-    const typesElements = ["Action", "Creature", "Item", "Support"];
-    const rarityElements = ["Common", "Rare", "Epic", "Legendary"];
+    const subTypesElements = ["SubType"].concat(props.subTypesElements);
+    const typesElements = ["Type", "Action", "Creature", "Item", "Support"];
+    const rarityElements = ["Rarity", "Common", "Rare", "Epic", "Legendary"];
 
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
@@ -49,7 +49,6 @@ class MainPage extends React.Component {
               );
             }}
           >
-            <Picker.Item label="Type" value="" />
             {typesElements.map((itemValue, index) => {
               return (
                 <Picker.Item label={itemValue} value={itemValue} key={index} />
@@ -76,11 +75,18 @@ class MainPage extends React.Component {
               );
             }}
           >
-            <Picker.Item label="SubType" value="" />
             {subTypesElements.map((itemValue, index) => {
-              return (
-                <Picker.Item label={itemValue} value={itemValue} key={index} />
-              );
+              if (index === 0) {
+                return <Picker.Item label={itemValue} value={""} key={index} />;
+              } else {
+                return (
+                  <Picker.Item
+                    label={itemValue}
+                    value={itemValue}
+                    key={index}
+                  />
+                );
+              }
             })}
           </Picker>
 
@@ -103,7 +109,6 @@ class MainPage extends React.Component {
               );
             }}
           >
-            <Picker.Item label="Rarity" value="" />
             {rarityElements.map((itemValue, index) => {
               return (
                 <Picker.Item label={itemValue} value={itemValue} key={index} />

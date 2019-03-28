@@ -57,16 +57,21 @@ class HomeScreen extends React.Component {
   }
 
   fetchElements = () => {
-    //if (this.state.subTypesElements.length == 0) {
-    fetch(`${url2}subtypes`)
-      .then(response => response.json())
-      .then(data =>
-        this.setState({
-          subTypesElements: data.subtypes
-        })
-      )
-      .catch(console.log("error"));
-    //}
+    if (this.state.subTypesElements.length == 0) {
+      fetch(`${url2}subtypes`)
+        .then(response => response.json())
+        .then(data =>
+          this.setState(
+            {
+              subTypesElements: data.subtypes
+            },
+            () => {
+              this.fetchTheApi();
+            }
+          )
+        )
+        .catch(console.log("error"));
+    }
   };
 
   fetchTheApi = concat => {
@@ -77,6 +82,7 @@ class HomeScreen extends React.Component {
       this.state.rarity == "" &&
       this.state.cards.length <= this.state.totalCount
     ) {
+      console.log("fetch");
       fetch(`${url}?page=${this.state.pageNumber}`)
         .then(response => response.json())
         .then(data =>
@@ -123,7 +129,7 @@ class HomeScreen extends React.Component {
 
   componentDidMount() {
     this.fetchElements();
-    this.fetchTheApi();
+    //this.fetchTheApi();
   }
 
   render() {
