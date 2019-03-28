@@ -50,9 +50,17 @@ class MainPage extends React.Component {
             }}
           >
             {typesElements.map((itemValue, index) => {
-              return (
-                <Picker.Item label={itemValue} value={itemValue} key={index} />
-              );
+              if (index === 0) {
+                return <Picker.Item label={itemValue} value={""} key={index} />;
+              } else {
+                return (
+                  <Picker.Item
+                    label={itemValue}
+                    value={itemValue}
+                    key={index}
+                  />
+                );
+              }
             })}
           </Picker>
 
@@ -110,9 +118,17 @@ class MainPage extends React.Component {
             }}
           >
             {rarityElements.map((itemValue, index) => {
-              return (
-                <Picker.Item label={itemValue} value={itemValue} key={index} />
-              );
+              if (index === 0) {
+                return <Picker.Item label={itemValue} value={""} key={index} />;
+              } else {
+                return (
+                  <Picker.Item
+                    label={itemValue}
+                    value={itemValue}
+                    key={index}
+                  />
+                );
+              }
             })}
           </Picker>
         </View>
