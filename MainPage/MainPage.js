@@ -2,7 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import { CustomSearchBar } from "./CustomSearchBar";
 import { ListView } from "./ListView";
-import { SpinnerMenu } from "./SpinnerMenu";
+import { OptionMenus } from "./OptionMenus";
 
 class MainPage extends React.Component {
   constructor(props) {
@@ -68,35 +68,17 @@ class MainPage extends React.Component {
           handleSearchChange={props.handleSearchChange}
           value={props.search}
         />
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "flex-start",
-            justifyContent: "space-evenly"
-          }}
-        >
-          <SpinnerMenu
-            menuWidth={"28%"}
-            selectedValue={props.type}
-            onValueChange={this.onTypeChanged}
-            spinnerElements={typesElements}
-          />
-
-          <SpinnerMenu
-            menuWidth={"40%"}
-            selectedValue={props.subType}
-            onValueChange={this.onSubTypeChanged}
-            spinnerElements={subTypesElements}
-          />
-
-          <SpinnerMenu
-            menuWidth={"32%"}
-            selectedValue={props.rarity}
-            onValueChange={this.onRarityChanged}
-            spinnerElements={rarityElements}
-          />
-        </View>
+        <OptionMenus
+          type={props.type}
+          subType={props.subType}
+          rarity={props.rarity}
+          typesElements={typesElements}
+          subTypesElements={subTypesElements}
+          rarityElements={rarityElements}
+          onTypeChanged={this.onTypeChanged}
+          onSubTypeChanged={this.onSubTypeChanged}
+          onRarityChanged={this.onRarityChanged}
+        />
 
         <ListView
           data={props.data}
