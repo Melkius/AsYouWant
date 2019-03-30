@@ -4,8 +4,16 @@ import { Input } from "react-native-elements";
 class CustomSearchBar extends React.Component {
   render() {
     const props = this.props;
+    console.log("search value : ", props.clearIt);
+    if (props.clearIt === true) {
+      this.textInput.clear();
+      props.resetClear();
+    }
     return (
       <Input
+        ref={input => {
+          this.textInput = input;
+        }}
         placeholder=" Search your card here..."
         leftIcon={{ type: "font-awesome", name: "search" }}
         onChangeText={text => props.handleSearchChange(text)}

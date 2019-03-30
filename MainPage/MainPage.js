@@ -3,6 +3,7 @@ import { View } from "react-native";
 import { CustomSearchBar } from "./CustomSearchBar";
 import { ListView } from "./ListView";
 import { OptionMenus } from "./OptionMenus";
+import { Button, Divider } from "react-native-elements";
 
 class MainPage extends React.Component {
   constructor(props) {
@@ -67,6 +68,28 @@ class MainPage extends React.Component {
         <CustomSearchBar
           handleSearchChange={props.handleSearchChange}
           value={props.search}
+          clearIt={props.clearIt}
+          resetClear={props.resetClear}
+        />
+        <Button
+          title="Reset Query And Filters"
+          onPress={() => this.props.onResetQuery()}
+          buttonStyle={{ width: 300 }}
+          titleStyle={{
+            color: "black",
+            fontStyle: "italic",
+            textAlign: "center"
+          }}
+          raised={true}
+          type="outline"
+        />
+        <Divider
+          style={{
+            backgroundColor: "grey",
+            height: 2,
+            width: "100%",
+            marginTop: 5
+          }}
         />
         <OptionMenus
           type={props.type}
@@ -79,7 +102,9 @@ class MainPage extends React.Component {
           onSubTypeChanged={this.onSubTypeChanged}
           onRarityChanged={this.onRarityChanged}
         />
-
+        <Divider
+          style={{ backgroundColor: "grey", height: 2, width: "100%" }}
+        />
         <ListView
           data={props.data}
           fetchTheApi={props.fetchTheApi}

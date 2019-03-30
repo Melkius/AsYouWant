@@ -19,7 +19,8 @@ class HomeScreen extends React.Component {
       subType: "",
       subTypesElements: [],
       typesElements: [],
-      raritiesElements: []
+      raritiesElements: [],
+      clearIt: false
     };
     this.setAttributes = this.setAttributes.bind(this);
   }
@@ -123,6 +124,22 @@ class HomeScreen extends React.Component {
     });
   }
 
+  resetClear = () => {
+    this.setState({
+      clearIt: false
+    });
+  };
+
+  onResetQuery = () => {
+    this.setState(
+      {
+        search: "",
+        clearIt: true
+      },
+      () => this.setAttributes("", "", "")
+    );
+  };
+
   onDetail = item => {
     this.props.navigation.navigate("Details", { card: item });
   };
@@ -145,6 +162,9 @@ class HomeScreen extends React.Component {
         subType={this.state.subType}
         rarity={this.state.rarity}
         subTypesElements={this.state.subTypesElements}
+        onResetQuery={this.onResetQuery}
+        clearIt={this.state.clearIt}
+        resetClear={this.resetClear}
       />
     );
   }
