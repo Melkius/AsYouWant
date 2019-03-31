@@ -1,9 +1,9 @@
 import React from "react";
 import axios from "axios";
 import { MainPage } from "./MainPage";
+import { ActivityIndicator, View, StyleSheet } from "react-native";
 
 const url = `https://api.elderscrollslegends.io/v1/`;
-//const url2 = `https://api.elderscrollslegends.io/v1/`;
 
 class HomeScreen extends React.Component {
   constructor(props) {
@@ -47,13 +47,14 @@ class HomeScreen extends React.Component {
         subType: subType,
         rarity: rarity
       },
-      () =>
+      () => {
         this.fetchCardsWithSearch(
           this.state.search,
           this.state.type,
           this.state.subType,
           this.state.rarity
-        )
+        );
+      }
     );
   }
 
@@ -64,14 +65,17 @@ class HomeScreen extends React.Component {
         .then(data =>
           this.setState(
             {
-              subTypesElements: data.subtypes
+              subTypesElements: data.subtypes,
+              isLoading: true
             },
             () => {
               this.fetchTheApi();
             }
           )
         )
-        .catch(console.log("error"));
+        .catch(e => {
+          console.log("ERROR fetch elements : ", e);
+        });
     }
   };
 
@@ -83,7 +87,6 @@ class HomeScreen extends React.Component {
       this.state.rarity == "" &&
       this.state.cards.length <= this.state.totalCount
     ) {
-      console.log("fetch");
       fetch(`${url}cards?page=${this.state.pageNumber}`)
         .then(response => response.json())
         .then(data =>
@@ -91,20 +94,19 @@ class HomeScreen extends React.Component {
             ? this.setState(state => ({
                 cards: state.cards.concat(data.cards),
                 pageNumber: this.state.pageNumber + 1,
-                totalCount: data._totalCount
+                totalCount: data._totalCount,
+                isLoading: false
               }))
             : this.setState(() => ({
                 cards: data.cards,
                 pageNumber: this.state.pageNumber + 1,
-                totalCount: data._totalCount
+                totalCount: data._totalCount,
+                isLoading: false
               }))
         )
-        .then(() =>
-          this.setState({
-            isLoading: false
-          })
-        )
-        .catch();
+        .catch(e => {
+          console.log("ERROR fetch API : ", e);
+        });
     }
   };
 
@@ -112,21 +114,26 @@ class HomeScreen extends React.Component {
     const attributedUrl = `${url}cards/?name=${text}&type=${
       type ? type : ""
     }&rarity=${subType ? subType : ""}&subtypes=${rarity ? rarity : ""}`;
-    axios.get(attributedUrl).then(res => {
-      console.log("url params : ", text, type, subType, rarity, attributedUrl);
-      var updateList = res.data.cards;
-      this.setState({
-        cards: []
+    axios
+      .get(attributedUrl)
+      .then(res => {
+        var updateList = res.data.cards;
+        this.setState({
+          cards: []
+        });
+        this.setState({
+          cards: updateList
+        });
+      })
+      .catch(e => {
+        console.log("ERROR fetchCardsWithSearch : ", e);
       });
-      this.setState({
-        cards: updateList
-      });
-    });
   }
 
   resetClear = () => {
     this.setState({
-      clearIt: false
+      clearIt: false,
+      isLoading: false
     });
   };
 
@@ -134,7 +141,8 @@ class HomeScreen extends React.Component {
     this.setState(
       {
         search: "",
-        clearIt: true
+        clearIt: true,
+        isLoading: false
       },
       () => this.setAttributes("", "", "")
     );
@@ -150,6 +158,16 @@ class HomeScreen extends React.Component {
 
   render() {
     const { search } = this.state;
+
+    // loader
+    if (this.state.isLoading) {
+      return (
+        <View style={styles.loader}>
+          <ActivityIndicator size="large" color="grey" />
+        </View>
+      );
+    }
+
     return (
       <MainPage
         search={search}
@@ -171,3 +189,11 @@ class HomeScreen extends React.Component {
 }
 
 export { HomeScreen };
+
+const styles = StyleSheet.create({
+  loader: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center"
+  }
+});

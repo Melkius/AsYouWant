@@ -1,19 +1,12 @@
 import React from "react";
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { SpinnerMenu } from "./SpinnerMenu";
 
 class OptionMenus extends React.Component {
   render() {
     const props = this.props;
     return (
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "flex-start",
-          justifyContent: "space-evenly"
-        }}
-      >
+      <View style={styles.optionMenu}>
         <SpinnerMenu
           menuWidth={"28%"}
           selectedValue={props.type}
@@ -40,3 +33,12 @@ class OptionMenus extends React.Component {
 }
 
 export { OptionMenus };
+
+const styles = StyleSheet.create({
+  optionMenu: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "space-evenly"
+  }
+});

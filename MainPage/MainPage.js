@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { CustomSearchBar } from "./CustomSearchBar";
 import { ListView } from "./ListView";
 import { OptionMenus } from "./OptionMenus";
@@ -58,13 +58,7 @@ class MainPage extends React.Component {
     const rarityElements = ["Rarity", "Common", "Rare", "Epic", "Legendary"];
 
     return (
-      <View
-        style={{
-          flex: 1,
-          alignItems: "center",
-          justifyContent: "center"
-        }}
-      >
+      <View style={styles.mainPage}>
         <CustomSearchBar
           handleSearchChange={props.handleSearchChange}
           value={props.search}
@@ -75,22 +69,11 @@ class MainPage extends React.Component {
           title="Reset Query And Filters"
           onPress={() => this.props.onResetQuery()}
           buttonStyle={{ width: 300 }}
-          titleStyle={{
-            color: "black",
-            fontStyle: "italic",
-            textAlign: "center"
-          }}
+          titleStyle={styles.buttonTitle}
           raised={true}
           type="outline"
         />
-        <Divider
-          style={{
-            backgroundColor: "grey",
-            height: 2,
-            width: "100%",
-            marginTop: 5
-          }}
-        />
+        <Divider style={styles.dividerTop} />
         <OptionMenus
           type={props.type}
           subType={props.subType}
@@ -102,9 +85,7 @@ class MainPage extends React.Component {
           onSubTypeChanged={this.onSubTypeChanged}
           onRarityChanged={this.onRarityChanged}
         />
-        <Divider
-          style={{ backgroundColor: "grey", height: 2, width: "100%" }}
-        />
+        <Divider style={styles.dividerBottom} />
         <ListView
           data={props.data}
           fetchTheApi={props.fetchTheApi}
@@ -116,3 +97,23 @@ class MainPage extends React.Component {
 }
 
 export { MainPage };
+
+const styles = StyleSheet.create({
+  mainPage: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  dividerTop: {
+    backgroundColor: "grey",
+    height: 2,
+    width: "100%",
+    marginTop: 5
+  },
+  dividerBottom: { backgroundColor: "grey", height: 2, width: "100%" },
+  buttonTitle: {
+    color: "black",
+    fontStyle: "italic",
+    textAlign: "center"
+  }
+});
