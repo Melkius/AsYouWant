@@ -2,12 +2,6 @@ import React from "react";
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import { HomeScreen } from "./MainPage/Container";
 import { DetailsScreen } from "./DetailPage/DetailScreen";
-import { Button } from "react-native";
-
-onReset = param => {
-  console.log("reset props : ", param);
-  //props.navigate("Home");
-};
 
 const RootStack = createStackNavigator({
   Home: {

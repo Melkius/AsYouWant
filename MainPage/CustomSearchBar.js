@@ -4,7 +4,6 @@ import { Input } from "react-native-elements";
 class CustomSearchBar extends React.Component {
   render() {
     const props = this.props;
-    console.log("search value : ", props.clearIt);
     if (props.clearIt === true) {
       this.textInput.clear();
       props.resetClear();
