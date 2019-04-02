@@ -1,6 +1,7 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View } from "react-native";
 import { Text } from "react-native-elements";
+import styles from "../Styles";
 
 class CustomLabel extends React.Component {
   render() {
@@ -16,18 +17,3 @@ class CustomLabel extends React.Component {
 }
 
 export { CustomLabel };
-
-const styles = StyleSheet.create({
-  labelContainer: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center"
-  },
-  h1: {
-    fontSize: 16,
-    textShadowColor: "#807053",
-    textShadowOffset: { width: 0.8, height: 0.8 },
-    padding: 4
-  },
-  description: { padding: 4 }
-});

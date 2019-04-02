@@ -1,7 +1,8 @@
 import React from "react";
 import axios from "axios";
 import { MainPage } from "./MainPage";
-import { ActivityIndicator, View, StyleSheet } from "react-native";
+import { ActivityIndicator, View } from "react-native";
+import styles from "../Styles";
 
 const url = `https://api.elderscrollslegends.io/v1/`;
 
@@ -189,11 +190,3 @@ class HomeScreen extends React.Component {
 }
 
 export { HomeScreen };
-
-const styles = StyleSheet.create({
-  loader: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center"
-  }
-});

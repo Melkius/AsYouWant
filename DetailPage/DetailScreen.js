@@ -1,6 +1,7 @@
 import React from "react";
-import { View, Button, Image, ScrollView, StyleSheet } from "react-native";
+import { View, Button, Image, ScrollView } from "react-native";
 import { DetailTextPanel } from "./DetailTextPanel";
+import styles from "../Styles";
 
 class DetailsScreen extends React.Component {
   render() {
@@ -31,19 +32,3 @@ class DetailsScreen extends React.Component {
 }
 
 export { DetailsScreen };
-
-const styles = StyleSheet.create({
-  scrollView: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 15,
-    marginTop: 15
-  },
-  cardImage: {
-    minWidth: 250,
-    maxWidth: 400,
-    height: 400,
-    maxHeight: 450
-  }
-});

@@ -1,6 +1,7 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View } from "react-native";
 import { SpinnerMenu } from "./SpinnerMenu";
+import styles from "../Styles";
 
 class OptionMenus extends React.Component {
   render() {
@@ -33,12 +34,3 @@ class OptionMenus extends React.Component {
 }
 
 export { OptionMenus };
-
-const styles = StyleSheet.create({
-  optionMenu: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "flex-start",
-    justifyContent: "space-evenly"
-  }
-});
