@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
 import { SpinnerMenu } from "./SpinnerMenu";
-import styles from "../Styles";
+import styles from "../../Styles";
 
 class OptionMenus extends React.Component {
   render() {
