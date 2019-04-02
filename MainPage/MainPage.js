@@ -1,11 +1,11 @@
 import React from "react";
 import { View } from "react-native";
-import { CustomSearchBar } from "./CustomSearchBar";
+import { CustomSearchBar } from "./Headers/CustomSearchBar";
 import { ListView } from "./ListView";
-import { OptionMenus } from "./OptionMenus";
-import { Button, Divider } from "react-native-elements";
+import { OptionMenus } from "./Headers/OptionMenus";
+import { Divider } from "react-native-elements";
 import styles from "../Styles";
-import { ResetButton } from "./ResetButton";
+import { ResetButton } from "./Headers/ResetButton";
 
 class MainPage extends React.Component {
   constructor(props) {

@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
 import { Button } from "react-native-elements";
-import styles from "../Styles";
+import styles from "../../Styles";
 
 class ResetButton extends React.Component {
   render() {
