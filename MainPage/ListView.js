@@ -1,6 +1,7 @@
 import React from "react";
 import { FlatList, TouchableOpacity, StyleSheet } from "react-native";
 import { Image } from "react-native-elements";
+import styles from "../Styles";
 
 class ListView extends React.Component {
   render() {
@@ -25,14 +26,3 @@ class ListView extends React.Component {
 }
 
 export { ListView };
-
-const styles = StyleSheet.create({
-  image: {
-    flex: 1,
-    margin: 5,
-    minWidth: 180,
-    maxWidth: 250,
-    height: 304,
-    maxHeight: 304
-  }
-});

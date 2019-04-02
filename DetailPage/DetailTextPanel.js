@@ -1,14 +1,15 @@
 import React from "react";
 import { CustomLabel } from "./CustomLabel";
 import { Divider } from "react-native-elements";
-import { View, StyleSheet } from "react-native";
+import { View } from "react-native";
+import styles from "../Styles";
 
 class DetailTextPanel extends React.Component {
   render() {
     const props = this.props;
     return (
       <View>
-        <Divider style={styles.dividerTop} />
+        <Divider style={styles.detailDividerTop} />
         <CustomLabel title={"Name :"} text={props.name} />
         <CustomLabel title={"Rarity :"} text={props.rarity} />
         <CustomLabel title={"Type :"} text={props.type} />
@@ -22,15 +23,10 @@ class DetailTextPanel extends React.Component {
           title={"Collectible :"}
           text={props.collectible.toString()}
         />
-        <Divider style={styles.dividerBottom} />
+        <Divider style={styles.detailDividerBottom} />
       </View>
     );
   }
 }
 
 export { DetailTextPanel };
-
-const styles = StyleSheet.create({
-  dividerTop: { backgroundColor: "grey" },
-  dividerBottom: { backgroundColor: "grey", marginBottom: 10 }
-});
