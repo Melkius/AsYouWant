@@ -20,11 +20,6 @@ class DetailsScreen extends React.Component {
             cost={card.cost}
             collectible={card.collectible.toString()}
           />
-          <Button
-            color={"#D2B48C"}
-            title="Go back"
-            onPress={() => this.props.navigation.goBack()}
-          />
         </View>
       </ScrollView>
     );

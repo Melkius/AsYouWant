@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { MainPage } from "./MainPage";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator, View, Platform } from "react-native";
 import styles from "../Styles";
 
 const url = `https://api.elderscrollslegends.io/v1/`;
@@ -159,14 +159,22 @@ class HomeScreen extends React.Component {
 
   render() {
     const { search } = this.state;
-
     // loader
     if (this.state.isLoading) {
-      return (
-        <View style={styles.loader}>
-          <ActivityIndicator size="large" color="grey" />
-        </View>
-      );
+      console.log(Platform.OS);
+      if (Platform.OS == "android") {
+        return (
+          <View style={styles.loader}>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        );
+      } else {
+        return (
+          <View style={styles.loader}>
+            <ActivityIndicator size="large" color="#ff55ff" />
+          </View>
+        );
+      }
     }
 
     return (
